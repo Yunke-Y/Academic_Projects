@@ -118,16 +118,26 @@ scatterplot(density~alcohol|Okay,data=redwine.new,smooth=FALSE,xlab="Alcohol",yl
 #Leave out categorical variable good as the baseline
 model.two= lm(density~alcohol+Good+Okay+alcohol*Okay, data=redwine.new)
 summary(model.two)
+#Plot model without interaction term to compare coefficient of determination
+model.two3= lm(density~alcohol+Good+Okay, data=redwine.new)
+summary(model.two3)
+
+#Plot residuals
+plot(model.two$residuals~Linear_Model$fitted.values,xlab="Predicted values",ylab="Residuals")
+abline(h=0,col="red")
+
+#Make a normal probability plot of residuals
+qqnorm(model.two$residuals,main="Normal probability plot of residuals")
 
 #Model Three 
-#Create a vector including all viable columns (we don't want to include our 
-#categorical variable quality but instead only include our dummy variables 
-#derived from this column)
+  #Create a vector including all viable columns (we don't want to include our 
+  #categorical variable quality but instead only include our dummy variables 
+  #derived from this column)
 summary(redwine.new)
 ModelThreeData = cbind("fixed.acidity", "volatile.acidity", "citric.acid", 
-                       "residual.sugar", "chlorides", "free.sulfur.dioxide",
-                       "total.sulfur.dioxide", "density", "pH", "sulphates", 
-                       "alcohol","Good", "Okay")  
+                      "residual.sugar", "chlorides", "free.sulfur.dioxide",
+                      "total.sulfur.dioxide", "density", "pH", "sulphates", 
+                      "alcohol","Good", "Okay")  
 
 RedWine = redwine.new[,ModelThreeData] # empty space for row/column means to return all
 names(RedWine) # show variables in the dataset
@@ -138,4 +148,11 @@ m0<-lm(pH~.,data=RedWine); summary(m0)
 
 m.step<-step(m0,direction="backward") # stepwise regression
 summary(m.step)
+
+#Plot residuals
+plot(m.step$residuals~Linear_Model$fitted.values,xlab="Predicted values",ylab="Residuals")
+abline(h=0,col="red")
+
+#Make a normal probability plot of residuals
+qqnorm(m.step$residuals,main="Normal probability plot of residuals")
 
